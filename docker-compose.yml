@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=beastbattle
+    volumes:
+      - ./db_data:/var/lib/postgresql/data/
+  frontend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.frontend
+    ports:
+      - 9090:9090
+    environment:
+      - NEXT_PUBLIC_BASE_URL=http://localhost:7777
+    depends_on:
+      - backend
+    volumes:
+      - ./projects/frontend/.:/home/node/frontend
+      - /home/node/frontend/node_modules
+    command:
+      - sh
+      - -c
+      - |
+        yarn --frozen-lockfile
+        yarn dev
+  contracts:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.contracts
+    ports:
+      - 8545:8545
+    volumes:
+      - ./projects/contracts/.:/home/node/contracts
+      - /home/node/contracts/node_modules
+    command:
+      - sh
+      - -c
+      - |
+        yarn --frozen-lockfile
+        yarn dev
+  backend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.backend
+    ports:
+      - 7777:7777
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=beastbattle
+      - DB_PW=root
+      - DB_DB=beastbattle
+      - SCHEMA=public
+      - JWT_SECRET=xydbsi12whwdyce
+      - JWT_EXPIRES_IN=1296000000
+      - PASSWORD_SALT_OR_ROUND=10
+    depends_on:
+      - postgres
+    volumes:
+      - ./projects/backend/.:/home/node/backend
+      - /home/node/backend/node_modules
+    command:
+      - sh
+      - -c
+      - |
+        yarn --frozen-lockfile
+        yarn dev

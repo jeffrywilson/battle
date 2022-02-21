@@ -1,0 +1,21 @@
+FROM node:16
+
+RUN mkdir -p /home/node/contracts
+
+WORKDIR /home/node/contracts
+
+#Copy new files or directories into the filesystem of the container
+COPY ./projects/contracts/package.json .
+COPY yarn.lock .
+
+##Copy new files or directories into the filesystem of the container
+COPY ./projects/contracts/. .
+
+#Execute commands in a new layer on top of the current image and commit the results
+RUN yarn install
+
+#Informs container runtime that the container listens on the specified network ports at runtime
+EXPOSE 8545
+
+#Allows you to configure a container that will run as an executable
+CMD ["yarn", "dev"]

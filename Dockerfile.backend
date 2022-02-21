@@ -1,0 +1,35 @@
+#Creates a layer from node:alpine image.
+FROM node:16
+
+#Creates directories
+RUN mkdir -p /home/node/backend
+
+#Sets an environment variable
+ENV PORT 7777
+
+#Provider variables
+ENV INFURA_PROJECT_ID = "4a7b16f82edd4ea089c1b3f6eabffeb0"
+ENV INFURA_SECRET = "496b1b4ba37645c385266004f9f2e559"
+ENV INFURA_ENDPOINT = "https://rinkeby.infura.io/v3/4a7b16f82edd4ea089c1b3f6eabffeb0"
+ENV INFURA_ENDPOINT_WSS = "wss://rinkeby.infura.io/ws/v3/4a7b16f82edd4ea089c1b3f6eabffeb0"
+ENV ALCHEMY_ENDPOINT = "https://eth-rinkeby.alchemyapi.io/v2/TDcaZoHiK1gun2qEFzVep1FJNSESGWFa"
+ENV ALCHEMY_ENDPOINT_WSS = "wss://eth-rinkeby.alchemyapi.io/v2/TDcaZoHiK1gun2qEFzVep1FJNSESGWFa"
+
+#Sets the working directory for any RUN, CMD, ENTRYPOINT, COPY, and ADD commands
+WORKDIR /home/node/backend
+
+#Copy new files or directories into the filesystem of the container
+COPY ./projects/backend/package.json .
+COPY yarn.lock .
+
+##Copy new files or directories into the filesystem of the container
+COPY ./projects/backend/. .
+
+#Execute commands in a new layer on top of the current image and commit the results
+RUN yarn --frozen-lockfile
+
+#Informs container runtime that the container listens on the specified network ports at runtime
+EXPOSE 7777
+
+#Allows you to configure a container that will run as an executable
+CMD ["yarn", "dev"]

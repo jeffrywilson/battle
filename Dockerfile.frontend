@@ -1,0 +1,27 @@
+#Creates a layer from node:alpine image.
+FROM node:16-alpine
+
+#Creates directories
+RUN mkdir -p /home/node/frontend
+
+#Sets an environment variable
+ENV PORT 9090
+
+#Sets the working directory for any RUN, CMD, ENTRYPOINT, COPY, and ADD commands
+WORKDIR /home/node/frontend
+
+#Copy new files or directories into the filesystem of the container
+COPY ./projects/frontend/package.json .
+COPY yarn.lock .
+
+##Copy new files or directories into the filesystem of the container
+COPY ./projects/frontend/. .
+
+#Execute commands in a new layer on top of the current image and commit the results
+RUN yarn --frozen-lockfile
+
+#Informs container runtime that the container listens on the specified network ports at runtime
+EXPOSE 9090
+
+#Allows you to configure a container that will run as an executable
+CMD ["yarn", "dev"]

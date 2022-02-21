@@ -1,0 +1,48 @@
+{
+  "private": true,
+  "name": "beastbattle",
+  "scripts": {
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
+    "copycontracts": "yarn workspace contracts copycontracts",
+    "format": "yarn workspaces run format",
+    "lint": "yarn workspaces run lint",
+    "lint:ci": "yarn workspaces run lint:ci",
+    "test": "yarn workspaces run test",
+    "test:contracts": "yarn workspace contracts run test:contracts",
+    "types:check": "yarn workspace run types:check",
+    "postinstall": "husky install"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^1.1.1",
+    "@fontsource/cormorant-garamond": "^4.5.1",
+    "@fontsource/courier-prime": "^4.5.1",
+    "@mdx-js/loader": "^2.0.0",
+    "@next/mdx": "^12.0.10",
+    "@types/node": "^17.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "chakra-ui": "^0.3.9",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-chai-friendly": "^0.7.2",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "husky": "^7.0.4",
+    "typescript": "^4.5.4"
+  },
+  "devDependencies": {
+    "prettier": "^2.5.1",
+    "ts-node": "^10.4.0"
+  },
+  "workspaces": {
+    "packages": [
+      "projects/*"
+    ],
+    "nohoist": [
+      "**/typeorm/**",
+      "**/typeorm"
+    ]
+  }
+}

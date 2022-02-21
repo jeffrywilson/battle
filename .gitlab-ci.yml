@@ -1,0 +1,14 @@
+image: node:alpine
+
+test:
+  stage: test
+  image: tarampampam/node:17-alpine
+  before_script:
+    - yarn install
+  script:
+    - yarn lint:ci
+    - NODE_OPTIONS=--openssl-legacy-provider yarn test
+
+cache:
+  paths:
+    - node_modules/
